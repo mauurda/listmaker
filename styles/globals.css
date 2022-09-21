@@ -1,3 +1,28 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    
+    h1{
+        @apply
+        text-5xl font-extrabold
+    }
+    h2{
+         @apply
+       text-3xl font-bold tracking-widest
+    }
+    h3 {
+        @apply
+       text-xl font-semibold tracking-wider
+    }
+    h4{
+        @apply
+        text-lg font-medium
+    }
+    .clickable{
+        @apply
+        cursor-pointer hover:shadow-md rounded-md
+    }
+  
+}
