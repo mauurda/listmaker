@@ -1,27 +1,29 @@
-# Next.js + Tailwind CSS Example
+# Take-home challenge instructions
 
-This example shows how to use [Tailwind CSS](https://tailwindcss.com/) [(v3.0)](https://tailwindcss.com/blog/tailwindcss-v3) with Next.js. It follows the steps outlined in the official [Tailwind docs](https://tailwindcss.com/docs/guides/nextjs).
+### Aim of this challenge:
 
-## Deploy your own
+- Develop a simple web app using  React & TypeScript 
+- You have full freedom over the styling of your app and while this is not as important to your overall score as functionality and code conventions we would expect your app to be responsive and follow best CSS practices (e.g. BEM naming conventions)
+- App.tsx currently imports dummy json data - you **MUST** use data returned from an api call in your final submission, rather than this data.
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example) or preview live with [StackBlitz](https://stackblitz.com/github/vercel/next.js/tree/canary/examples/with-tailwindcss)
+### Running the app
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-tailwindcss&project-name=with-tailwindcss&repository-name=with-tailwindcss)
+To fire up the project run `npm install` and then `npm run start` in the root directory
 
-## How to use
 
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init), [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/), or [pnpm](https://pnpm.io) to bootstrap the example:
-
-```bash
-npx create-next-app --example with-tailwindcss with-tailwindcss-app
-```
-
-```bash
-yarn create next-app --example with-tailwindcss with-tailwindcss-app
-```
-
-```bash
-pnpm create next-app --example with-tailwindcss with-tailwindcss-app
-```
-
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+  #### Senior Developer
+  - Create at least two separate pages:
+    - Home page with ~10 items displayed
+    - Individual page to show info on each item, accessed by clicking on an item on the home page
+  - Use of at least 3 separate front-end components to display data (you may edit and use the existing `Card` component but `App` does not count 😉 )
+  - Integrate with one of the APIs listed below to retrieve data using an authenticated GET request (any method of implementation is allowed)
+    - https://developers.themoviedb.org/3/getting-started/authentication
+    - https://developer.spotify.com/documentation/web-api/
+    - https://developers.gettyimages.com/docs/
+  - Include a search component using queries to filter results
+  - Create re-usable types and interfaces and import as appropriate
+  - Apply atomic design priniciples to the app structure
+  - Setup linting config and apply to your repo
+  - Implement performant code and comment to show where you have made improvements or tested your output
+  - Keep the size of your built repo as small as possible
+  - Push to a repo on github/gitlab with properly labelled commits
