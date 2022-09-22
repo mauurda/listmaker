@@ -17,9 +17,7 @@ To fire up the project run `npm install` and then `npm run start` in the root di
     - Individual page to show info on each item, accessed by clicking on an item on the home page
   - Use of at least 3 separate front-end components to display data (you may edit and use the existing `Card` component but `App` does not count 😉 )
   - Integrate with one of the APIs listed below to retrieve data using an authenticated GET request (any method of implementation is allowed)
-    - https://developers.themoviedb.org/3/getting-started/authentication
     - https://developer.spotify.com/documentation/web-api/
-    - https://developers.gettyimages.com/docs/
   - Include a search component using queries to filter results
   - Create re-usable types and interfaces and import as appropriate
   - Apply atomic design priniciples to the app structure
