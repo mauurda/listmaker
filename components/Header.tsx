@@ -9,7 +9,7 @@ import { Session } from "next-auth";
 
 function Header() {
   const { data } = useSession();
-  console.log("Data, ", data);
+
   //@ts-ignore
   const session: Session = data?.session;
 
