@@ -58,11 +58,8 @@ export const SelectionProvider = ({
     ]);
   };
   const getPlaylistTracks = async (playlist_id: string) => {
-    let baseURL =
-      process.env.NODE_ENV === "production"
-        ? "https://listmaker.vercel.app"
-        : "http://localhost:3000";
-    let fullURL = baseURL + "/api/playlist/" + playlist_id;
+ 
+    let fullURL = "/api/playlist/" + playlist_id;
 
     const playlist_data: SpotifyApi.PlaylistObjectFull = await fetch(
       fullURL

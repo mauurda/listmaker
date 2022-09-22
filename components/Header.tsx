@@ -36,7 +36,10 @@ function Header() {
             <ArrowRightOnRectangleIcon className="h-8" />
           </div>
         ) : (
-          <div className="flex items-center clickable" onClick={() => signIn()}>
+          <div
+            className="flex items-center clickable"
+            onClick={() => signIn("spotify")}
+          >
             <h4 className="hidden md:inline mr-2">Login</h4>
             <UserCircleIcon className="h-8 " />
           </div>
