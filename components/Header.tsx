@@ -5,10 +5,13 @@ import {
   UserCircleIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { Session } from "next-auth";
 
 function Header() {
   const { data } = useSession();
-  const session = data?.session;
+  console.log("Data, ", data);
+  //@ts-ignore
+  const session: Session = data?.session;
 
   return (
     <header className="bg-green-900 flex w-full py-3">

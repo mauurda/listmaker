@@ -15,16 +15,18 @@ function PlaylistTrack({
 }: PlaylistTrack) {
   return (
     <div className="flex py-2  justify-between clickable w-full">
-      <div className="flex  items-center space-x-2">
+      <div className="flex  items-center  space-x-2">
         <div className={selected ? "text-white" : "text-transparent"}>
           <CheckCircleIcon className={`h-6 `} />
         </div>
-        <img
-          src={track?.album.images[0].url}
-          className="h-12 aspect-square object-cover"
-        />
-        <div className="flex flex-col text-ellipsis">
-          <h4 className="truncate">{track?.name}</h4>
+        {track?.album.images[0]?.url && (
+          <img
+            src={track?.album.images[0]?.url}
+            className="h-12 aspect-square object-cover"
+          />
+        )}
+        <div className="flex flex-col ">
+          <h4 className="">{track?.name}</h4>
           <h5>{track?.artists.map((artist) => artist.name).join(", ")}</h5>
         </div>
       </div>

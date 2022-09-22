@@ -6,6 +6,7 @@ const handler = async (req, res) => {
     token: { accessToken },
   } = await getSession({ req });
 
+
   const { items } = await getUsersPlaylists(accessToken).then((res) =>
     res.json()
   );
