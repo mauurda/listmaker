@@ -77,6 +77,10 @@ export const SelectionProvider = ({
       }
     }
   };
+  const clearSelection = () => {
+    setSelectedPlaylists([]);
+    setSelectedTracks([]);
+  };
 
   useEffect(() => {
     if (selectedPlaylists?.length) {
@@ -101,6 +105,7 @@ export const SelectionProvider = ({
         deselectPlaylist,
         selectTracks,
         deselectTracks,
+        clearSelection,
       }}
     >
       {children}
@@ -112,10 +117,11 @@ export default function useSelection(): {
   selectedTrackUris: string[];
   selectedPlaylists: SpotifyApi.PlaylistObjectSimplified[];
   selectedPlaylistIds: string[];
-  selectTracks: any;
-  deselectTracks: any;
-  selectPlaylist: any;
-  deselectPlaylist: any;
+  selectTracks: (tracks: SpotifyApi.TrackObjectFull[]) => void;
+  deselectTracks: (track_uris: string[]) => void;
+  selectPlaylist: (playlist: SpotifyApi.PlaylistObjectSimplified) => void;
+  deselectPlaylist: (playlist_id: string) => void;
+  clearSelection: () => void;
 } {
   //@ts-ignore
   return useContext(SelectionContext);

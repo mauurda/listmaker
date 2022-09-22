@@ -1,70 +1,95 @@
-import {
-  ArrowLeftIcon,
-  MagnifyingGlassIcon,
-  PlusIcon,
-} from "@heroicons/react/24/outline";
-import { useSession } from "next-auth/react";
-import Link from "next/link";
-import { useRouter } from "next/router";
+//zipped size 3.19 kb
+//first load 143 kb
+
 import React, { useEffect, useState } from "react";
+
+//hooks
+import { useRouter } from "next/router";
+import useSelection from "../../hooks/useSelection";
+
+//components
+import { ArrowLeftIcon, PlusIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
 import Button from "../../components/Button";
 import PlaylistTrack from "../../components/PlaylistTrack";
 import SearchSongsSection from "../../components/SearchSongsSection";
-import useSelection from "../../hooks/useSelection";
+
+//helper functions
+import { isPresent } from "ts-is-present";
 
 function PlaylistDetailsPage() {
+  //PlaylistData
+  //Future enhancement - > server side fetching
   const [playlist, setPlaylist] = useState<SpotifyApi.PlaylistObjectFull>();
-  const { selectedTrackUris, selectTracks, deselectTracks, selectPlaylist } =
-    useSelection();
-  const router = useRouter();
-  const { data } = useSession();
-  const user = data?.user;
-
-  const { playlist_id } = router.query;
   const [searchExternalMode, setSearchExternalMode] = useState(false);
 
-  const selectAll = () => {
-    selectPlaylist(playlist);
-    selectTracks(
-      playlist?.tracks.items.map((playListTrack) => playListTrack.track)
-    );
-  };
-  const deselectAll = () => {
-    deselectTracks(
-      playlist?.tracks.items.map((playListTrack) => playListTrack.track?.uri)
-    );
-  };
-  const getPlaylistData = async () => {
-    let baseURL =
-      process.env.NODE_ENV === "production"
-        ? "https://listmaker.vercel.app"
-        : "http://localhost:3000";
-    let fullURL = baseURL + "/api/playlist/" + router.query.playlist_id;
+  //Selection Context
+  const { selectedTrackUris, selectTracks, deselectTracks, selectPlaylist } =
+    useSelection();
 
-    const playlist_data = await fetch(fullURL).then((res) => res.json());
+  const router = useRouter();
+  const { playlist_id } = router.query;
+
+  //Selects all tracks in the playlist
+  const selectAll = () => {
+    //Checks not empty playlist
+    if (playlist && playlist?.tracks?.items) {
+      //selects playlist
+      selectPlaylist(playlist);
+
+      const tracks = playlist?.tracks.items
+        .map((playListTrack) => playListTrack.track)
+        .filter(isPresent);
+
+      //adds songs directly
+      selectTracks(tracks);
+    }
+  };
+
+  //Deselects all tracks in a playlist
+  const deselectAll = () => {
+    const tracks = playlist?.tracks.items
+      .map((playListTrack) => playListTrack.track?.uri)
+      .filter(isPresent);
+    //Checks not empty
+
+    if (tracks?.length) {
+      //Deselects all uris
+      deselectTracks(tracks);
+    }
+  };
+
+  //Fetches playlist full data
+  const getPlaylistData = async () => {
+    const playlist_data = await fetch(
+      "/api/playlist/" + router.query.playlist_id
+    ).then((res) => res.json());
     setPlaylist(playlist_data);
   };
-  const addSongToPlaylist = async (track_uris: string[]) => {
-    let baseURL =
-      process.env.NODE_ENV === "production"
-        ? "https://listmaker.vercel.app"
-        : "http://localhost:3000";
-    let fullURL = `${baseURL}/api/playlist/${
+
+  //Adds tracks returned from Search Song Section to the playlist
+  //Future improvement: function allows for array of tracks but Search Song is set up for single track
+  const addTracksToPlaylist = async (track_uris: string[]) => {
+    let fullURL = `/api/playlist/${
       router.query.playlist_id
     }/tracks?uris=${track_uris.join(",")}`;
 
-    const response = await fetch(fullURL, {
+    await fetch(fullURL, {
       method: "POST",
     }).then((res) => res.json());
     await getPlaylistData();
     setSearchExternalMode(false);
   };
 
+  //Gets playlist data on mount or returns home
   useEffect(() => {
     if (playlist_id) {
       getPlaylistData();
+    } else {
+      router.push("/");
     }
   }, [playlist_id]);
+
   return (
     <div className="flex flex-col space-y-5">
       <div className="flex">
@@ -75,6 +100,7 @@ function PlaylistDetailsPage() {
           </Button>
         </Link>
       </div>
+
       <div className="grid md:grid-cols-2 gap-10">
         <div className="flex flex-col space-y-5">
           {!!playlist?.images?.length && (
@@ -94,7 +120,7 @@ function PlaylistDetailsPage() {
               </Button>
             </div>
           )}
-          {playlist?.description}
+          <p className="text-lg">{playlist?.description}</p>
         </div>
         {!searchExternalMode ? (
           <div>
@@ -107,34 +133,39 @@ function PlaylistDetailsPage() {
               </Button>
             </div>
             <div className="flex flex-col w-full">
-              {playlist?.tracks?.items?.map((playlistTrack) => {
-                const selected = playlistTrack.track?.uri
-                  ? selectedTrackUris.includes(playlistTrack.track?.uri)
-                  : false;
+              {/* 
+              Future improvement: add max-height to make scrolling easier
+              */}
+              {playlist?.tracks?.items
+                ?.filter((playlistTrack) => !!playlistTrack?.track?.uri)
+                .filter(isPresent)
+                .map((playlistTrack) => {
+                  const selected = playlistTrack.track?.uri
+                    ? selectedTrackUris.includes(playlistTrack.track?.uri)
+                    : false;
 
-                return (
-                  <div
-                    onClick={
-                      selected
-                        ? () => deselectTracks([playlistTrack.track?.uri])
-                        : () => selectTracks([playlistTrack.track])
-                    }
-                  >
-                    <PlaylistTrack
-                      {...playlistTrack}
+                  return (
+                    <div
+                      onClick={
+                        selected
+                          ? //@ts-ignore    Pre-filtered above
+                            () => deselectTracks([playlistTrack.track?.uri])
+                          : //@ts-ignore    Pre-filtered above
+                            () => selectTracks([playlistTrack.track])
+                      }
                       key={playlistTrack.track?.uri}
-                      selected={selected}
-                    />
-                  </div>
-                );
-              })}
+                    >
+                      <PlaylistTrack {...playlistTrack} selected={selected} />
+                    </div>
+                  );
+                })}
             </div>
           </div>
         ) : (
           <SearchSongsSection
             onClose={() => setSearchExternalMode(false)}
             onClick={(track: SpotifyApi.TrackObjectFull) =>
-              addSongToPlaylist([track.uri])
+              addTracksToPlaylist([track.uri])
             }
           />
         )}

@@ -1,48 +1,36 @@
-import {
-  ArrowLeftIcon,
-  MagnifyingGlassIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
+import React, { useState } from "react";
 
-import React, { useEffect, useState } from "react";
-
+import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import Button from "./Button";
 import FullTrack from "./FullTrack";
-import PlaylistTrack from "./PlaylistTrack";
 
 function SearchSongsSection({
   onClick,
   onClose,
 }: {
-  onClick: any;
-  onClose: any;
+  onClick: (track: SpotifyApi.TrackObjectFull) => void;
+  onClose: () => void;
 }) {
-  const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [trackResults, setTrackResults] = useState<
     SpotifyApi.TrackObjectFull[]
   >([]);
+  //searches song s based on query
   const searchSongs = async (input: string) => {
-    let baseURL =
-      process.env.NODE_ENV === "production"
-        ? "https://listmaker.vercel.app"
-        : "http://localhost:3000";
-    let fullURL = baseURL + "/api/tracks?q=" + JSON.stringify(input);
-
+    let fullURL = "/api/tracks?q=" + JSON.stringify(input);
     const response = await fetch(fullURL).then((res) => res.json());
     if (response?.tracks?.items?.length) {
       setTrackResults(response?.tracks?.items);
     } else {
       setTrackResults([]);
     }
-
-    setLoading(false);
   };
 
+  //handles typing and search.
+  //only searches after 3 or more letters
   const handleTyping = (input: string) => {
     setInputValue(input);
     if (input.length > 2) {
-      setLoading(true);
       searchSongs(input);
     }
   };

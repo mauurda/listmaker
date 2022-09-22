@@ -1,19 +1,13 @@
 import React from "react";
-
 import { motion } from "framer-motion";
-import Button from "./Button";
 
-type CardProps = {
-  name: string;
-  numberOfSongs: number;
-  image: string | false;
-};
+import type PlaylistCardProps from "../types/components/PlaylistCard";
 
 export default function PlaylistCard({
   name,
   numberOfSongs,
   image,
-}: CardProps) {
+}: PlaylistCardProps) {
   return (
     <motion.div
       className={"flex cursor-pointer  space-y-5  flex-col"}

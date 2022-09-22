@@ -3,16 +3,14 @@ import moment from "moment";
 import { CalendarIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 import { getMinuteStringFromMiliseconds } from "../utils/timeFunctions";
 
-interface PlaylistTrack extends SpotifyApi.PlaylistTrackObject {
-  selected?: boolean;
-}
+
 
 function PlaylistTrack({
   added_at,
   added_by,
   track,
   selected = false,
-}: PlaylistTrack) {
+}: PlaylistTrackProps) {
   return (
     <div className="flex py-2  justify-between clickable w-full">
       <div className="flex  items-center  space-x-2">
