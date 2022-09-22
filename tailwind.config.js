@@ -5,7 +5,11 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      maxHeight: {
+        140: "44rem",
+      },
+    },
   },
   plugins: [],
   whitelist: ["text-transparent", "text-white"],

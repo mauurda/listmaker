@@ -45,7 +45,7 @@ const Home: NextPage = () => {
     <div className="">
       <LayoutGroup>
         {selectedPlaylists?.length ? (
-          <div className="flex-col space-y-5">
+          <div className="flex-col space-y-5 mb-5">
             <h2>Playlists you've selected to merge</h2>
             <div className="flex flex-row overflow-x-scroll w-full scrollbar-hide">
               {selectedPlaylists?.map((playlist) => (
@@ -64,6 +64,11 @@ const Home: NextPage = () => {
               ))}
             </div>
             <p>({selectedTrackUris?.length}) songs</p>
+            <Link href={`/merge`}>
+              <Button>
+                <p>Merge and create new playlist</p>
+              </Button>
+            </Link>
           </div>
         ) : (
           <h4>Select a playlist to begin</h4>

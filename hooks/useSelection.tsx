@@ -21,16 +21,28 @@ export const SelectionProvider = ({
   const [selectedTrackUris, setSelectedTrackUris] = useState<string[]>([]);
   const [selectedPlaylistIds, setSelectedPlaylistUris] = useState<string[]>([]);
 
-  const selectPlaylist = (playlist: SpotifyApi.PlaylistObjectSimplified) => {
+  const selectPlaylist = async (
+    playlist: SpotifyApi.PlaylistObjectSimplified
+  ) => {
     setSelectedPlaylists([...(selectedPlaylists || []), playlist]);
-    selectPlaylistTracks(playlist.id);
+    const playlistTracks = await getPlaylistTracks(playlist.id);
+    if (playlistTracks?.length) {
+      //@ts-ignore
+      selectTracks(playlistTracks);
+    }
   };
-  const deselectPlaylist = (playlist_id: string) => {
+  const deselectPlaylist = async (playlist_id: string) => {
     setSelectedPlaylists([
       ...(selectedPlaylists || []).filter(
         (playlist) => playlist.id !== playlist_id
       ),
     ]);
+    const playlistTracks = await getPlaylistTracks(playlist_id);
+    if (playlistTracks?.length) {
+      deselectTracks(
+        playlistTracks.map((track) => (track as SpotifyApi.TrackObjectFull).uri)
+      );
+    }
   };
   const selectTracks = (tracks: SpotifyApi.TrackObjectFull[]) => {
     setSelectedTracks([
@@ -45,7 +57,7 @@ export const SelectionProvider = ({
       ),
     ]);
   };
-  const selectPlaylistTracks = async (playlist_id: string) => {
+  const getPlaylistTracks = async (playlist_id: string) => {
     let baseURL =
       process.env.NODE_ENV === "production"
         ? "https://listmaker.vercel.app"
@@ -61,7 +73,7 @@ export const SelectionProvider = ({
       );
       if (tracks.length) {
         //@ts-ignore
-        selectTracks(tracks);
+        return tracks;
       }
     }
   };
@@ -96,7 +108,7 @@ export const SelectionProvider = ({
   );
 };
 export default function useSelection(): {
-  selectedTracks: SpotifyApi.TrackObjectSimplified[];
+  selectedTracks: SpotifyApi.TrackObjectFull[];
   selectedTrackUris: string[];
   selectedPlaylists: SpotifyApi.PlaylistObjectSimplified[];
   selectedPlaylistIds: string[];
